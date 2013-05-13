@@ -172,6 +172,16 @@
 		</java>
 	</target>
 
+	<target name="gui-server" depends="install-server">
+		<echo message="Starting server..." />
+		<java jar="D:\Games\Minecraft\server\minecraft_server.jar"
+			fork="true"
+			spawn="true"
+			maxmemory="1024m"
+			dir="D:\Games\Minecraft\server"
+		/>
+	</target>
+
 	<!-- Default target to run -->
 	<target name="main" depends="package"/>
 
