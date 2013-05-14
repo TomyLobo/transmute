@@ -6,6 +6,7 @@ import java.util.Map;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import eu.tomylobo.commandsystem.commands.BindCommand;
 import eu.tomylobo.transmute.Transmute;
 import eu.tomylobo.util.PlayerHelper;
 import eu.tomylobo.util.StringUtils;
@@ -58,6 +59,8 @@ public class CommandSystem {
 	@Mod.ServerStarting
 	public void onServerStart(FMLServerStartingEvent event) {
 		this.serverStartingEvent = event;
+
+		new BindCommand();
 
 		for (Map.Entry<String, ICommand> entry : commands.entrySet()) {
 			registerCommandWithMinecraft(entry.getKey(), entry.getValue());
