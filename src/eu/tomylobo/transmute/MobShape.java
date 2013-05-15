@@ -40,9 +40,9 @@ public class MobShape extends EntityShape {
 		p24.yaw = (byte) ((int) ((entity.rotationYaw+yawOffset) * 256.0F / 360.0F));
 		p24.pitch = (byte) ((int) (entity.rotationPitch * 256.0F / 360.0F));
 		p24.headYaw = p24.yaw;
-		//p24.i = 
-		//p24.j = 
-		//p24.k = 
+		//p24.velocityX =
+		//p24.velocityY =
+		//p24.velocityZ =
 		ObfuscationReflectionHelper.setPrivateValue(Packet24MobSpawn.class, p24, datawatcher, "s", "metaData");
 		return p24;
 	}
