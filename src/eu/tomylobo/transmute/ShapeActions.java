@@ -63,19 +63,6 @@ final class ShapeActions {
 				if (dataValue != null) {
 					stack.setItemDamage(dataValue);
 				}
-				/*else if (material.itemID == Block.cloth.blockID || material == Item.dyePowder) {
-					try {
-						DyeColor dyeColor = DyeColor.valueOf(colorName.replace("GREY", "GRAY"));
-
-						if (material.itemID == Block.cloth.blockID)
-							stack.setDurability(dyeColor.getWoolData());
-						else
-							stack.setDurability(dyeColor.getDyeData());
-					}
-					catch (IllegalArgumentException e) {
-						throw new CommandException("Color "+colorName+" not found", e);
-					}
-				}*/
 				else {
 					throw new CommandException("Material "+materialName+" cannot have a data value.");
 				}
@@ -285,24 +272,23 @@ final class ShapeActions {
 		registerMobActions(91, // Sheep
 				"help",
 				new HelpMobAction("/sac shorn|color <color>|baby|adult"),
-				/*"color",
+				"color",
 				new ShapeAction() { @Override public void run(EntityShape shape, EntityPlayer player, String[] args, String argStr) throws CommandException {
-					DyeColor dyeColor = DyeColor.WHITE;
+					short dyeColor = 0;
 					try {
 						if ("RAINBOW".equalsIgnoreCase(argStr) || "RAINBOWS".equalsIgnoreCase(argStr) || "RANDOM".equalsIgnoreCase(argStr)) {
-							DyeColor[] dyes = DyeColor.values();
-							dyeColor = dyes[(int)Math.floor(dyes.length*Math.random())];
+							dyeColor = (short)Math.floor(16*Math.random());
 						}
 						else {
-							dyeColor = DyeColor.valueOf(argStr.toUpperCase());
+							dyeColor = Materials.getSheepColorByName(argStr);
 						}
 					}
 					catch (Exception e) { }
 
-					shape.setData(16, dyeColor.getWoolData());
+					shape.setData(16, (byte) dyeColor);
 
-					PlayerHelper.sendDirectedMessage(player, "You are now "+dyeColor.toString().toLowerCase().replace('_',' ')+".");
-				}},*/
+					PlayerHelper.sendDirectedMessage(player, "You are now "+Materials.getSheepColorName(dyeColor)+".");
+				}},
 				"shorn",
 				new MetadataMobAction(16, (byte) 16, "You are now shorn."),
 				"baby",
