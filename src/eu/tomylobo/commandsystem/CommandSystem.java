@@ -5,9 +5,8 @@ import java.util.Map;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import eu.tomylobo.commandsystem.commands.BindCommand;
-import eu.tomylobo.transmute.Transmute;
 import eu.tomylobo.util.PlayerHelper;
 import eu.tomylobo.util.StringUtils;
 import net.minecraft.command.CommandBase;
@@ -36,13 +35,12 @@ public class CommandSystem {
 	 */
 	private FMLServerStartingEvent serverStartingEvent;
 
-	@Mod.Init
-	public void init(FMLInitializationEvent event) {
-		Transmute.logger.info("TLCommandSystem initializing...");
-		MinecraftForge.EVENT_BUS.register(this);
+	// Commands
+	@Mod.PreInit
+	public void preInit(FMLPreInitializationEvent event) {
+		ICommand.discover(event);
 	}
 
-	// Commands
 	public ICommand getCommand(String name) {
 		return commands.get(name);
 	}
@@ -59,8 +57,6 @@ public class CommandSystem {
 	@Mod.ServerStarting
 	public void onServerStart(FMLServerStartingEvent event) {
 		this.serverStartingEvent = event;
-
-		new BindCommand();
 
 		for (Map.Entry<String, ICommand> entry : commands.entrySet()) {
 			registerCommandWithMinecraft(entry.getKey(), entry.getValue());
@@ -98,6 +94,11 @@ public class CommandSystem {
 	}
 
 	// ToolBinds
+	@Mod.Init
+	public void init(FMLInitializationEvent event) {
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+
 	@ForgeSubscribe
 	public void onPlayerInteractEntity(EntityInteractEvent event) {
 		final ToolBind toolBind = getToolBindForEvent(event);
@@ -116,7 +117,7 @@ public class CommandSystem {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			PlayerHelper.sendDirectedMessage(player, e.getMessage(), '4');
+			PlayerHelper.sendDirectedMessage(player, e.toString(), '4');
 		}
 	}
 

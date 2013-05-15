@@ -5,9 +5,6 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import eu.tomylobo.transmute.commands.ShapeActionCommand;
-import eu.tomylobo.transmute.commands.TestCommand;
-import eu.tomylobo.transmute.commands.TransmuteCommand;
 
 @Mod(
 	modid = "Transmute",
@@ -33,10 +30,6 @@ public class TransmuteMod {
 	@Mod.Init
 	public void init(FMLInitializationEvent event) {
 		Transmute.logger.info("Transmute initializing...");
-
-		new TransmuteCommand();
-		new ShapeActionCommand();
-		new TestCommand();
 	}
 
 	@Mod.PostInit

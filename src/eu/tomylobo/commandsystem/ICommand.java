@@ -1,5 +1,6 @@
 package eu.tomylobo.commandsystem;
 
+import eu.tomylobo.transmute.Transmute;
 import eu.tomylobo.util.PlayerHelper;
 import eu.tomylobo.util.Utils;
 
@@ -10,6 +11,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import cpw.mods.fml.common.discovery.ASMDataTable.ASMData;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -216,5 +220,18 @@ public abstract class ICommand {
 		int reqlvl = getMinLevel();
 
 		return plylvl >= reqlvl;
+	}
+
+	static void discover(FMLPreInitializationEvent event) {
+		for (ASMData asm : event.getAsmData().getAll(ICommand.Names.class.getName())) {
+			Transmute.logger.info("TLCommandSystem found command class "+asm.getClassName());
+
+			try {
+				Class.forName(asm.getClassName()).newInstance();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
