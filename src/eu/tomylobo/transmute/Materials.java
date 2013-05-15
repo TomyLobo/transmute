@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
 public class Materials {
 	private static final List<Map<String,Item>> aliases = new ArrayList<Map<String,Item>>();
 	private static final Map<String,Short> dataValues = new HashMap<String,Short>();
-	private static int ruleNumber;
 
 	private static void addAlias(int priority, Item item, String... names) {
 		for (int i = aliases.size(); i <= priority; ++i) {
@@ -24,7 +23,6 @@ public class Materials {
 		Map<String, Item> aliases2 = aliases.get(priority);
 
 		for (String name : names) {
-			Transmute.logger.info(String.format("%s/%d: %s (rule %d)", item.getItemName(), priority, name, ruleNumber));
 			name = name.toLowerCase();
 			aliases2.put(name, item);
 			aliases2.put(name.replaceAll("_", "."), item);
@@ -41,7 +39,6 @@ public class Materials {
 	}
 
 	static {
-		ruleNumber = -2;
 		addAlias(Item.shovelWood, "wood_spade", "wooden_spade");
 		addAlias(Item.shovelStone, "stone_spade");
 		addAlias(Item.shovelSteel, "iron_spade");
@@ -52,7 +49,7 @@ public class Materials {
 		addAlias(Item.axeSteel, "golden_axe");
 		addAlias(Item.axeDiamond, "golden_axe");
 		addAlias(Item.axeGold, "gold_axe", "golden_axe");
-		// TODO: generic
+		// TODO: generic ^
 
 		addAlias(Block.cobblestone, "cobblestone", "cobble_stone", "cobble");
 		addAlias(Block.leaves, "leaf");
@@ -163,11 +160,10 @@ public class Materials {
 			final String itemName = item.getItemName();
 			if (itemName == null)
 				continue;
-			ruleNumber = -1;
+
 			addAlias(item, itemName);
 
 			for (int j = 0; j < patterns.length; ++j) {
-				ruleNumber = j;
 				final Matcher matcher = patterns[j].matcher(itemName);
 				if (!matcher.matches())
 					continue;
