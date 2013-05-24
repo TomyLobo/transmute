@@ -1,6 +1,5 @@
 package eu.tomylobo.transmute.commands;
 
-import eu.tomylobo.commandsystem.ICommand;
 import eu.tomylobo.commandsystem.ICommand.*;
 import eu.tomylobo.commandsystem.PermissionDeniedException;
 import eu.tomylobo.commandsystem.ToolBind;
@@ -27,26 +26,17 @@ import java.util.List;
 		"  -e to transmute an entity (binds to a tool)\n" +
 		"  -i <item name or id> together with -e to bind to a specific tool\n" +
 		"  -l to transmute the last entity you transmuted\n" +
+		"  -c to transmute the closest transmuted entity\n" +
 		"  -x to bind to the left instead of the right mouse button"
 )
 @Usage("[<flags>][<shape>]")
 @Permission("transmute.transmute")
-@BooleanFlags("el")
+@BooleanFlags("elcx")
 @StringFlags("i")
-public class TransmuteCommand extends ICommand {
+public class TransmuteCommand extends TransmuteBaseCommand {
 	@Override
-	public void Run(EntityPlayer ply, String[] args, String argStr) throws CommandException {
-		args = parseFlags(args);
-
+	public void Run2(EntityPlayer ply, String[] args, String argStr, Entity target) throws CommandException {
 		if (args.length == 0) {
-			final Entity target;
-			if (booleanFlags.contains('l')) {
-				target = TransmuteMod.instance.transmute.getLastTransmutedEntity(ply);
-			}
-			else {
-				target = ply;
-			}
-
 			if (!TransmuteMod.instance.transmute.isTransmuted(target))
 				throw new CommandException("Not transmuted");
 
@@ -108,14 +98,6 @@ public class TransmuteCommand extends ICommand {
 
 			PlayerHelper.sendDirectedMessage(ply, "Bound \u00a79"+mobType+"\u00a7f to your tool (\u00a7e"+toolType.getItemName()+"\u00a7f). Right-click an entity to use.");
 			return;
-		}
-
-		final Entity target;
-		if (booleanFlags.contains('l')) {
-			target = TransmuteMod.instance.transmute.getLastTransmutedEntity(ply);
-		}
-		else {
-			target = ply;
 		}
 
 		final Shape shape = TransmuteMod.instance.transmute.setShape(ply, target, mobType);

@@ -1,6 +1,5 @@
 package eu.tomylobo.transmute.commands;
 
-import eu.tomylobo.commandsystem.ICommand;
 import eu.tomylobo.commandsystem.ICommand.*;
 import eu.tomylobo.commandsystem.PermissionDeniedException;
 import eu.tomylobo.commandsystem.ToolBind;
@@ -21,16 +20,17 @@ import net.minecraftforge.event.entity.player.EntityInteractEvent;
 		"Flags:\n" +
 		"  -e to issue the command to an entity (binds to a tool)\n" +
 		"  -i <item name or id> together with -e to bind to a specific tool\n" +
-		"  -l to transmute the last entity you transmuted\n" +
+		"  -l to affect the last entity you transmuted\n" +
+		"  -c to affect the closest transmuted entity\n" +
 		"  -x to bind to the left instead of the right mouse button"
 )
 @Usage("[<flags>][<command>]")
 @Permission("transmute.shapeaction")
-@BooleanFlags("elx")
+@BooleanFlags("elcx")
 @StringFlags("i")
-public class ShapeActionCommand extends ICommand {
+public class ShapeActionCommand extends TransmuteBaseCommand {
 	@Override
-	public void Run(EntityPlayer ply, String[] args, String argStr) throws CommandException {
+	public void Run2(EntityPlayer ply, String[] args, String argStr, Entity target) throws CommandException {
 		final String shapeAction = parseFlags(argStr);
 
 		if (booleanFlags.contains('e')) {
@@ -69,14 +69,6 @@ public class ShapeActionCommand extends ICommand {
 
 			PlayerHelper.sendDirectedMessage(ply, "Bound \u00a79"+shapeAction+"\u00a7f to your tool (\u00a7e"+toolType.getItemName()+"\u00a7f). Right-click an entity to use.");
 			return;
-		}
-
-		final Entity target;
-		if (booleanFlags.contains('l')) {
-			target = TransmuteMod.instance.transmute.getLastTransmutedEntity(ply);
-		}
-		else {
-			target = ply;
 		}
 
 		final Shape shape = TransmuteMod.instance.transmute.getShape(target);

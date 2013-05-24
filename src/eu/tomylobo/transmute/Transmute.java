@@ -1,11 +1,13 @@
 package eu.tomylobo.transmute;
 
+import eu.tomylobo.math.Location;
 import eu.tomylobo.scheduler.ScheduledTask;
 import eu.tomylobo.scheduler.Scheduler;
 import eu.tomylobo.scheduler.WorldScheduler;
 import eu.tomylobo.transmute.listeners.TransmutePacketListener;
 import eu.tomylobo.transmute.listeners.TransmutePlayerListener;
 import eu.tomylobo.util.PlayerHelper;
+import eu.tomylobo.util.Utils;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -131,8 +133,35 @@ public class Transmute implements Runnable {
 		return packet;
 	}
 
-	public Entity getLastTransmutedEntity(EntityPlayer ply) {
-		return lastEntities.get(ply);
+	public Entity getLastTransmutedEntity(EntityPlayer player) {
+		return lastEntities.get(player);
+	}
+
+	public Entity getClosestTransmutedEntity(EntityPlayer player) {
+		final Location playerLocation = Utils.getLocation(player);
+
+		double minDistanceSq = 20*20;
+		Entity closest = null;
+
+		for (Iterator<Map.Entry<Integer, Shape>> iterator = transmuted.entrySet().iterator(); iterator.hasNext(); ) {
+			final Map.Entry<Integer, Shape> entry = iterator.next();
+			final Shape shape = entry.getValue();
+
+			final Entity entity = shape.entity;
+			if (entity.isDead) {
+				iterator.remove();
+				continue;
+			}
+
+			final double distanceSq = playerLocation.distanceSq(Utils.getLocation(entity));
+			if (distanceSq >= minDistanceSq)
+				continue;
+
+			minDistanceSq = distanceSq;
+			closest = entity;
+		}
+
+		return closest;
 	}
 
 	@Override
