@@ -2,7 +2,6 @@ package eu.tomylobo.transmute;
 
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
@@ -23,13 +22,11 @@ public class TransmuteMod {
 
 	@Mod.PreInit
 	public void preInit(FMLPreInitializationEvent evt) {
+		Transmute.logger.info("Transmute initializing...");
+
 		Configuration configFile = new Configuration(evt.getSuggestedConfigurationFile());
 
 		configFile.save();
-	}
-	@Mod.Init
-	public void init(FMLInitializationEvent event) {
-		Transmute.logger.info("Transmute initializing...");
 	}
 
 	@Mod.PostInit
