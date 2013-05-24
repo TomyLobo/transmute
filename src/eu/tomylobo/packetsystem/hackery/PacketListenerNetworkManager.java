@@ -67,4 +67,14 @@ public class PacketListenerNetworkManager implements INetworkManager {
 	public void closeConnections() {
 		wrapped.closeConnections();
 	}
+
+	// Hi ProfMobius!
+	public void addToSendQueue(Packet par1Packet, boolean analyze) {
+		if (analyze) {
+			addToSendQueue(par1Packet);
+		}
+		else {
+			wrapped.addToSendQueue(par1Packet);
+		}
+	}
 }
