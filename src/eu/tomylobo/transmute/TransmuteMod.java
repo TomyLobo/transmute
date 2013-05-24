@@ -8,7 +8,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 @Mod(
 	modid = "Transmute",
 	name = "Transmute",
-	version = "0.0.1",
+	version = "0.0.2",
 	dependencies = "required-after:TLPacketSystem;required-after:TLCommandSystem;required-after:TLScheduler"
 )
 public class TransmuteMod {
