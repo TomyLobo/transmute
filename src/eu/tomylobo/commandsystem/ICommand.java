@@ -30,7 +30,7 @@ public abstract class ICommand {
 	@Retention(RetentionPolicy.RUNTIME) public @interface StringFlags { String value(); }
 	@Retention(RetentionPolicy.RUNTIME) public @interface NumericFlags { String value(); }
 
-	public enum FlagType {
+	public static enum FlagType {
 		BOOLEAN, STRING, NUMERIC
 	}
 
@@ -44,7 +44,7 @@ public abstract class ICommand {
 		if (this.getClass().getAnnotation(Disabled.class) != null)
 			return;
 
-		Names namesAnnotation = this.getClass().getAnnotation(Names.class);
+		final Names namesAnnotation = this.getClass().getAnnotation(Names.class);
 		if (namesAnnotation != null) {
 			for (String name : namesAnnotation.value()) {
 				CommandSystem.instance.registerCommand(name, this);
@@ -55,17 +55,17 @@ public abstract class ICommand {
 	}
 
 	private void parseFlagsAnnotations() {
-		BooleanFlags booleanFlagsAnnotation = this.getClass().getAnnotation(BooleanFlags.class);
+		final BooleanFlags booleanFlagsAnnotation = this.getClass().getAnnotation(BooleanFlags.class);
 		if (booleanFlagsAnnotation != null) {
 			parseFlagsAnnotation(booleanFlagsAnnotation.value(), FlagType.BOOLEAN);
 		}
 
-		StringFlags stringFlagsAnnotation = this.getClass().getAnnotation(StringFlags.class);
+		final StringFlags stringFlagsAnnotation = this.getClass().getAnnotation(StringFlags.class);
 		if (stringFlagsAnnotation != null) {
 			parseFlagsAnnotation(stringFlagsAnnotation.value(), FlagType.STRING);
 		}
 
-		NumericFlags numericFlagsAnnotation = this.getClass().getAnnotation(NumericFlags.class);
+		final NumericFlags numericFlagsAnnotation = this.getClass().getAnnotation(NumericFlags.class);
 		if (numericFlagsAnnotation != null) {
 			parseFlagsAnnotation(numericFlagsAnnotation.value(), FlagType.NUMERIC);
 		}
@@ -111,7 +111,7 @@ public abstract class ICommand {
 
 		while (nextArg < args.length) {
 			// Fetch argument
-			String arg = args[nextArg++];
+			final String arg = args[nextArg++];
 
 			// Empty argument? (multiple consecutive spaces)
 			if (arg.isEmpty())
@@ -134,7 +134,7 @@ public abstract class ICommand {
 
 			// Go through the flags
 			for (int i = 1; i < arg.length(); ++i) {
-				char flagName = arg.charAt(i);
+				final char flagName = arg.charAt(i);
 
 				final FlagType flagType = flagTypes.get(flagName);
 				if (flagType == null)
@@ -174,7 +174,7 @@ public abstract class ICommand {
 	}
 
 	public final int getMinLevel() {
-		Level levelAnnotation = this.getClass().getAnnotation(Level.class);
+		final Level levelAnnotation = this.getClass().getAnnotation(Level.class);
 		if (levelAnnotation == null)
 			throw new UnsupportedOperationException("You need either a GetMinLevel method or an @Level annotation.");
 
@@ -197,14 +197,14 @@ public abstract class ICommand {
 	}
 
 	public final String getHelp() {
-		Help helpAnnotation = this.getClass().getAnnotation(Help.class);
+		final Help helpAnnotation = this.getClass().getAnnotation(Help.class);
 		if (helpAnnotation == null)
 			return "";
 
 		return helpAnnotation.value();
 	}
 	public final String getUsage() {
-		Usage usageAnnotation = this.getClass().getAnnotation(Usage.class);
+		final Usage usageAnnotation = this.getClass().getAnnotation(Usage.class);
 		if (usageAnnotation == null)
 			return "";
 
@@ -212,12 +212,12 @@ public abstract class ICommand {
 	}
 
 	public boolean canPlayerUseCommand(ICommandSender commandSender) {
-		Permission permissionAnnotation = this.getClass().getAnnotation(Permission.class);
+		final Permission permissionAnnotation = this.getClass().getAnnotation(Permission.class);
 		if (permissionAnnotation != null)
 			return Utils.hasPermission(commandSender, permissionAnnotation.value());
 
-		int plylvl = PlayerHelper.getPlayerLevel(commandSender);
-		int reqlvl = getMinLevel();
+		final int plylvl = PlayerHelper.getPlayerLevel(commandSender);
+		final int reqlvl = getMinLevel();
 
 		return plylvl >= reqlvl;
 	}
